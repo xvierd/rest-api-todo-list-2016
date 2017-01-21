@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, jsonify, json, Response
+from flask import Flask, jsonify, json, Response, request
 from flask_restful import Resource, Api
 from flask_mongoengine import MongoEngine
 from bson.json_util import dumps
@@ -31,7 +31,8 @@ class Todo(Resource):
     def delete(self, todo_id):
         return {'hello': 'world'},
 
-    def put(self, todo_id):
+    def put(self):
+        a = request.form['_id']
         return {'hello': 'world'}, 201
 
     def post(self, new_todo):
