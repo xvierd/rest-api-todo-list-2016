@@ -1,4 +1,6 @@
 import datetime
+
+from bson.objectid import ObjectId
 from flask import Flask, jsonify, json, Response, request
 from flask_restful import Resource, Api
 from flask_mongoengine import MongoEngine
@@ -31,11 +33,12 @@ class Todo(Resource):
     def delete(self, todo_id):
         return {'hello': 'world'},
 
-    def put(self):
-        a = request.form['_id']
-        return {'hello': 'world'}, 201
+    @staticmethod
+    def put():
+        TodoModel.objects(id=request.form['_id']).update_one(executed=json.loads(request.form['executed']))
+        return 'ok', 200
 
-    def post(self, new_todo):
+    def post(self):
         id_todo = mongo.db.todo.insert_one(
             {'date': datetime.datetime.now(), 'note': 'llevar la plata', 'executed': False}).inserted_id
         return Response(dumps(id_todo), 201, mimetype='application/json')
@@ -44,4 +47,4 @@ class Todo(Resource):
 api.add_resource(Todo, '/api/todo')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(threaded=True, host='0.0.0.0')
