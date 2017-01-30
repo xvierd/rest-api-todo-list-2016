@@ -42,7 +42,7 @@ class Todo(Resource):
     def post():
         todo = TodoModel(date=datetime.datetime.now(), note=request.form['note'], executed=False)
         todo.save()
-        return Response(dumps(todo), 201, mimetype='application/json')
+        return Response(todo.to_json(), 201, mimetype='application/json')
 
 
 api.add_resource(Todo, '/api/todo')
