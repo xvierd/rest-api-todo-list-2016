@@ -27,10 +27,12 @@ def hello_world():
 
 
 class Todo(Resource):
-    def get(self):
+    @staticmethod
+    def get():
         return Response(TodoModel.objects.to_json(), 200, mimetype='application/json')
 
-    def delete(self, todo_id):
+    @staticmethod
+    def delete(todo_id):
         return {'hello': 'world'},
 
     @staticmethod
