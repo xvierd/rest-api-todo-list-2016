@@ -38,10 +38,11 @@ class Todo(Resource):
         TodoModel.objects(id=request.form['_id']).update_one(executed=json.loads(request.form['executed']))
         return 'ok', 200
 
-    def post(self):
-        id_todo = mongo.db.todo.insert_one(
-            {'date': datetime.datetime.now(), 'note': 'llevar la plata', 'executed': False}).inserted_id
-        return Response(dumps(id_todo), 201, mimetype='application/json')
+    @staticmethod
+    def post():
+        todo = TodoModel(date=datetime.datetime.now(), note=request.form['note'], executed=False)
+        todo.save()
+        return Response(dumps(todo), 201, mimetype='application/json')
 
 
 api.add_resource(Todo, '/api/todo')
